@@ -1,0 +1,27 @@
+DATASET: Primary school temporal network data
+Release data: Sep 30, 2015
+
+This data set contains the temporal network of contacts between the
+children and teachers used in the study published in BMC Infectious
+Diseases 2014, 14:695.  The file contains a tab-separated list
+representing the active contacts during 20-second intervals of the
+data collection. Each line has the form “t i j Ci Cj”, where i and j
+are the anonymous IDs of the persons in contact, Ci and Cj are their
+classes, and the interval during which this contact was active is [ t
+– 20s, t ]. If multiple contacts are active in a given interval, you
+will see multiple lines starting with the same value of t.  Time is
+measured in seconds.  Terms and conditions
+
+The data are distributed to the public under a Creative Commons
+Attribution-NonCommercial-ShareAlike license. When this data is used
+in published research or for visualization purposes, please cite the
+following papers:
+
+Mitigation of infectious disease at school: targeted class closure vs
+school closure, BMC Infectious Diseases 14:695 (2014)
+
+High-Resolution Measurements of Face-to-Face Contact Patterns in a
+Primary School, PLOS ONE 6(8): e23176 (2011) 
+
+Please also acknowledge the SocioPatterns collaboration and provide a
+link to http://www.sociopatterns.org.
