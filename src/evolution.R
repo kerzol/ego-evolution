@@ -119,6 +119,7 @@ time.density <- function (links, bandwidth = 1024 * 2, n = 512) {
     ##
     ## links --- list of (timestamp, nodeA, nodeB)
     ##           supposed that nodeA <= nodeB
+    ##           (or nodesA and nodesB are two sets with intersection 0)
     ##
     ## bandwith --- a parameter. small bandwith means detailed
     ##                           large bandwith means global view
@@ -160,7 +161,7 @@ time.density <- function (links, bandwidth = 1024 * 2, n = 512) {
 
         Y <- dens$y * mass
 
-        cbind(nodeA = ulink$nodeA, nodeB = ulink$nodeB,
+        data.frame(nodeA = ulink$nodeA, nodeB = ulink$nodeB,
               time = X, density = Y, slice = 1:length(X)) -> partial
 
         res <- rbind(res, partial)

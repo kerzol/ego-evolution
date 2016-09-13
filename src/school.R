@@ -22,26 +22,72 @@ school.meta[school.meta$node==1500,2] -> her.class
 
 results <- temporal.pagerank (td.network, ego.centers, globality = 0.2)
 
+###33333333333333333333333333333333333333333333333333333333333333333##################
+#### Order experiments start
+###33333333333333333333333333333333333333333333333333333333333333333##################
 
-## One visualisation
-order (results[,5], decreasing = TRUE ) -> ord
-sresults <- results[ord,]
+### Order by values at 5th timestamp
+## order (results[,5], decreasing = TRUE ) -> ord
 
-visualise ( biz.scale (sresults),  timestamps,
-           yaxt = 'n', xlab = 'time',
-           ylab = '')
-
-
-
-## To order by rowsum
+### To order by rowsum
 ##   order (rowSums(results), decreasing=TRUE) -> ord
-## By rowmax
+
+### By rowmax
 ##   order (apply(results,1,max), decreasing=TRUE) -> ord
-## Or by something other
+
+### Or by something other
 ##   order (max.col(results), decreasing=TRUE) -> ord
 
+### Sequential comparison..
+### Order by min |f-g|
+## comp <- function (x,y) min(abs(x - y))
 
-## A sequence of visualisations
+### Order by min Σ|f-g|
+## comp <- function (x,y) sum(1./abs(x - y))
+
+### Order by correlation
+## comp <- function (x,y) -abs(cor(x,y))
+## ord <- 1:dim(results)[1]
+## ord[1] <- 123
+## ord[123] <- 1
+
+## first line is 1 current equals 2
+## for (current in 2 : length(ord) ) {
+##    index.of.min <- current
+##    current.min <- comp (results[ord[index.of.min], ],
+##                            results[ord[current-1], ])
+##    
+##    for (index in current : length(ord)){
+##
+##        new.min <- comp(results[ord[index], ],
+##                        results[ord[current-1], ])
+##        if ( new.min < current.min ) {
+##            index.of.min <- index
+##            current.min <- new.min
+##        }
+##    }
+##    
+##    ## when we found a min
+##    print (ord[index.of.min])
+##    temp <- ord[current]
+##    ord[current] <- ord[index.of.min]
+##    ord[index.of.min] <- temp
+##}
+
+### One visualisation
+## results <- results[ord,]
+## isualise ( biz.scale (sresults),  timestamps,
+##           yaxt = 'n', xlab = 'time',
+##           ylab = '')
+
+
+###33333333333333333333333333333333333333333333333333333333333333333##################
+### Order experiments stop
+###33333333333333333333333333333333333333333333333333333333333333333##################
+
+
+
+### A sequence of visualisations
 
 png("../figs/school%03d.png", width = 1200, height = 800)
 
