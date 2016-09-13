@@ -82,28 +82,20 @@ results <- temporal.pagerank (td.network, ego.centers, globality = 0.2)
 
 
 ###33333333333333333333333333333333333333333333333333333333333333333##################
-### Order experiments stop
+### / Order experiments stop
 ###33333333333333333333333333333333333333333333333333333333333333333##################
 
 
+vis.macro <- function() {
+    ## ATTENTION: a lot of global parameters
 
-### A sequence of visualisations
-
-png("../figs/school%03d.png", width = 1200, height = 800)
-
-for (i in 1:number.of.slices) {
-    ## sort results
-    order (results[,i], decreasing = TRUE ) -> ord
     sresults <- results[ord,]
 
     ## visualise results
     visualise ( biz.scale (sresults),  timestamps,
                yaxt = 'n', xlab = 'time',
                ylab = ''
-##               ,ylim=c(number.of.nodes-10-1, number.of.nodes + 1)
                )
-    ## timestamp that sorts
-    abline(v=timestamps[i]) 
 
     ## sort the metadata
     school.meta[match (names(sresults[,i]), school.meta$node),] ->
@@ -117,19 +109,6 @@ for (i in 1:number.of.slices) {
     number.of.nodes + 1 -
         which(school.meta.ord$class == '5A') + 0.5  ->
             A5.class.positions
-        
-    ## horizontal lines for the class of ego.centers
-    ## her.class = school.meta$class[school.meta$node == ego.centers]
-    ## abline(h = number.of.nodes + 1 -
-    ##            which(school.meta.ord$class == her.class) + 0.5
-    ##        , lty=3)
-
-
-    ## horizontal lines for teachers
-    ## abline(h = number.of.nodes + 1 -
-    ##            which(school.meta.ord$class == 'Teachers') + 0.5
-    ##        ,lty = 2)
-
     
     school.meta.ord$class -> labels.left
     axis(2, at=her.class.positions, col='black'
@@ -140,12 +119,34 @@ for (i in 1:number.of.slices) {
     
     school.meta.ord$sex -> labels.right
     axis(4, at=(number.of.nodes:1) + 0.5, labels=labels.right)
-
 }
 
+### A sequence of visualisations
+png("../figs/school%03d.png", width = 1200, height = 800)
 
+for (i in 1:number.of.slices) {
+    ## sort results
+    order (results[,i], decreasing = TRUE ) -> ord
+
+    vis.macro()
+
+    ## timestamp that sorts
+    abline(v=timestamps[i])
+}
 dev.off()
 
 
 ## to create a video run the following command
 ## ffmpeg -r 7 -i school%03d.png -vb 200M out.webm
+
+
+png("../figs/school-row-sums.png", width = 1200, height = 800)
+order (rowSums(results), decreasing=TRUE) -> ord
+vis.macro()
+dev.off()
+
+
+png("../figs/school-strange-max.png", width = 1200, height = 800)
+order (max.col(results), decreasing=TRUE) -> ord
+vis.macro()
+dev.off()
