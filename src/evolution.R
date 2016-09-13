@@ -199,6 +199,10 @@ pagerank <- function (M, ego.centers, alpha) {
     ## FIXME: Mchapo is dgCMatrix
     ##        But it seems that eigs over dgRMatrix
     ##        is faster than eigs over dgCMatrix
+    ##
+    ##        also we should not forget that eigs gives us 
+    ##        only aproximative eigenvector/values
+    ##
     ev <- eigs(Mchapo,1)$vectors[,1]
 
     ## return normalized ||x||_1 = 1 eigenvector
