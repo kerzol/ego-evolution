@@ -1,6 +1,7 @@
 library (igraph)
 library (Matrix)
-library (rgl)
+library (RSpectra)
+
 "%+%" <- function(...){
     paste0(...,sep="")
 }
@@ -41,7 +42,7 @@ temporal.pagerank <- function (td.network, ego.centers, globality = 0.15) {
           , sparse = TRUE
           , attr = 'weight')
        
-        result <- pagerank.noniter (M, ego.centers, alpha = globality)
+        result <- pagerank (M, ego.centers, alpha = globality)
 
         ## denormalize 
         result <- result *  sum (M)
@@ -171,7 +172,7 @@ time.density <- function (links, bandwidth = 1024 * 2, n = 512) {
     return (res)
 }
 
-pagerank.noniter <- function (M, ego.centers, alpha) {
+pagerank <- function (M, ego.centers, alpha) {
     ## big alpha -- global
     ## small alpha -- local
     ## INITIALISATION
@@ -194,7 +195,11 @@ pagerank.noniter <- function (M, ego.centers, alpha) {
     Mcursive <- t(Dia %*% M)
    
     Mchapo <- alpha * Mcursive + (1-alpha) * X0 %*% t(ONE)
-    ev <- eigen(Mchapo)$vectors[,1]
+
+    ## FIXME: Mchapo is dgCMatrix
+    ##        But it seems that eigs over dgRMatrix
+    ##        is faster than eigs over dgCMatrix
+    ev <- eigs(Mchapo,1)$vectors[,1]
 
     ## return normalized ||x||_1 = 1 eigenvector
     return (ev / sum(ev))
