@@ -102,21 +102,38 @@ vis.macro <- function() {
         school.meta.ord
 
     ## first nodes are in top
+
+    ## Clases
+
+    colors = c('yellow','blue','orange','violet','green','black',
+                'red','gray','brown','magenta','cyan')
+    classes = c("1A","1B","2A","2B","3A","3B",
+                "4A","4B","5A","5B","Teachers")
+    for (i in 1:length(colors)) {
+
+        cl = classes[i]
+        color = colors[i]
+        number.of.nodes + 1 -
+            which(school.meta.ord$class == cl) + 0.5  ->
+                class.positions
+        
+        axis(2, at=class.positions, col=color,
+             col.axis = 'white'
+             ,labels = NULL#rep(cl,length(class.positions))
+             )
+        
+    }
+
+    ## Her class
     number.of.nodes + 1 -
         which(school.meta.ord$class == her.class) + 0.5  ->
             her.class.positions
 
-    number.of.nodes + 1 -
-        which(school.meta.ord$class == '5A') + 0.5  ->
-            A5.class.positions
-    
     school.meta.ord$class -> labels.left
     axis(2, at=her.class.positions, col='black'
         ,labels = rep(her.class,length(her.class.positions)))
 
-    axis(2, at=A5.class.positions, col='grey', col.axis = 'grey'
-        ,labels = rep('5A',length(A5.class.positions)))
-    
+    ## sex
     school.meta.ord$sex -> labels.right
     axis(4, at=(number.of.nodes:1) + 0.5, labels=labels.right)
 }
