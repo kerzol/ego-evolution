@@ -26,7 +26,9 @@ network data" provided by sociopatterns.org.
 The lines in the following image corresponds to the students.  A
 column at the timestamp _t_ is the ego-community structure around one
 school student _Υ_, selected in advance as a center of the community.
-Red means _in the community of Υ_, blue means _out the community of Υ_.
+Cyan means _in the community of Υ_, black means _out the community of
+Υ_.  Right x-axis is about sex (male/female). The left x-axis denotes
+the classes of participants (1A,1B,2A,2B,3A,3B,4A,4B,5A,5B,Teachers).
 
 <img src="figs/school-greedy-top-bottom-add.png"  width="100%">
 
