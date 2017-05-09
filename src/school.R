@@ -22,6 +22,10 @@ school.meta[school.meta$node==1500,2] -> her.class
 
 results <- temporal.pagerank (td.network, ego.centers, globality = 0.2)
 
+results.old <- results
+## logify-magnify!
+results <- biz.scale (results)
+
 ###33333333333333333333333333333333333333333333333333333333333333333##################
 #### Order experiments start
 ###33333333333333333333333333333333333333333333333333333333333333333##################
@@ -92,7 +96,7 @@ vis.macro <- function() {
     sresults <- results[ord,]
 
     ## visualise results
-    visualise ( biz.scale (sresults),  timestamps,
+    visualise (sresults,  timestamps,
                yaxt = 'n', xlab = 'time',
                ylab = ''
                )
@@ -118,20 +122,21 @@ vis.macro <- function() {
                 class.positions
         
         axis(2, at=class.positions, col=color,
-             col.axis = 'white'
+             col.axis = 'white',
+              lwd = 2
              ,labels = NULL#rep(cl,length(class.positions))
              )
         
     }
 
     ## Her class
-    number.of.nodes + 1 -
-        which(school.meta.ord$class == her.class) + 0.5  ->
-            her.class.positions
+    ## number.of.nodes + 1 -
+    ##     which(school.meta.ord$class == her.class) + 0.5  ->
+    ##         her.class.positions
 
-    school.meta.ord$class -> labels.left
-    axis(2, at=her.class.positions, col='black'
-        ,labels = rep(her.class,length(her.class.positions)))
+    ## school.meta.ord$class -> labels.left
+    ## axis(2, at=her.class.positions, col='black'
+    ##     ,labels = rep(her.class,length(her.class.positions)))
 
     ## sex
     school.meta.ord$sex -> labels.right
@@ -167,3 +172,94 @@ png("../figs/school-strange-max.png", width = 1200, height = 800)
 order (max.col(results), decreasing=TRUE) -> ord
 vis.macro()
 dev.off()
+
+
+## 0 Preparation for line-student ordering
+
+## Standart distances include euclidean, maximum, manhattan, canberra,
+##          binary and minkowski
+
+## More Distance and Similarity Measures could be found in the next library
+library(proxy)
+
+summary(pr_DB)
+## * Similarity measures:
+## Braun-Blanquet, Chi-squared, correlation, cosine, Cramer, Dice, eDice,
+## eJaccard, Fager, Faith, Gower, Hamman, Jaccard, Kulczynski1,
+## Kulczynski2, Michael, Mountford, Mozley, Ochiai, Pearson, Phi,
+## Phi-squared, Russel, simple matching, Simpson, Stiles, Tanimoto,
+## Tschuprow, Yule, Yule2
+
+## * Distance measures:
+## Bhjattacharyya, Bray, Canberra, Chord, divergence, Euclidean, fJaccard,
+## Geodesic, Hellinger, Kullback, Levenshtein, Mahalanobis, Manhattan,
+## Minkowski, Podani, Soergel, supremum, Wave, Whittaker
+
+
+distances = dist (results, method = "euclidean")
+## resonablement good: Bhjattacharyya, divergence, Euclidean, Mahattan, Soergel, supremum,
+##                     eJaccard?, Kulczynski2?,
+##
+## not tested, because takes more time, computationnaly ineffective ?
+##             Podani, Chi-squared, Cramer, Tschuprow,
+##
+## ATTEBSION! certains distances/similarity measures give errors, they need to be RETESTED
+
+## 1 dimensional MDS as order for lines-students
+order(cmdscale(distances, k=2)[,1]) -> ord
+png("../figs/school-mds.png", width = 1200, height = 800)
+vis.macro()
+dev.off()
+## not so good, no so lisse in local sens.
+
+## 2 Pagerank
+order(pagerank(as.matrix(distances), ego.centers,0.2)) -> ord
+png("../figs/school-pagerank.png", width = 1200, height = 800)
+vis.macro()
+dev.off()
+## not so good, no so lisse in local sens.
+### Pagerank and Mds looks the same :)
+
+
+## Greedy add the best (in _di_stance sense) lines add on top/bottom of current position
+## TODO: move this code to 'evolution.R'
+allnames <- names(results[,1])
+ord <- c('1500')
+##ord <- sample(allnames,1) ## random
+restnames <- setdiff (allnames, ord)
+di <- function (a, b) {
+    return (sum( (a-b)**2))
+}
+for (i in 1:length(restnames)) {
+    di.first = 1000000000
+    di.last = 1000000000
+    good.for.first = -1
+    good.for.last = -1
+    for (n in restnames) {
+        first <- ord[1]
+        last <- ord[length(ord)]
+        if ( di( results[first,], results[n, ]) < di.first ) {
+            di.first = di( results[first,], results[n, ])
+            good.for.first = n
+        }
+        if ( di( results[last,], results[n, ]) < di.last ) {
+            di.last = di( results[last,], results[n, ])
+            good.for.last = n
+        }
+    }
+    if  (di.first <= di.last) {
+        ## add before
+        ord <- c(good.for.first, ord)
+        restnames <- setdiff(restnames, good.for.first)
+    } else {
+        ## add after
+        ord <- c(ord, good.for.last)
+        restnames <- setdiff(restnames, good.for.last)
+    }
+}
+vis.macro()
+
+png("../figs/school-greedy-top-add.png", width = 1200, height = 800)
+vis.macro()
+dev.off()
+## TROP BIEN, need to normalize before distance application!!11

@@ -91,7 +91,7 @@ visualise <- function (ranks, X, ...) {
               ytop = (length(rank):1) + 1,
               border = NA,
 ##              lwd = 0.1, ## line width of border
-              col = rgb ( colorRamp (c('darkblue','yellow','red')) (rank),  maxColorValue = 255)
+              col = rgb ( colorRamp (c('black','grey2','darkviolet','cyan')) (rank),  maxColorValue = 255)
               )
     }
 
