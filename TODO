@@ -1,9 +1,1 @@
-** Yoann, Frederic: Add "Multiple sequence alignment" based method to sort the lines
-** MadMax methode: pick random. add on top of the previous a better one. Continue
-** Sergey: MadMax + pick center, add on top, on bottom (alternate this).
-** Sergey: Do 1 dimensinal MDS.
-** Nicolas: Plonge the lines into an metric space.
-            Using the distances provided by this space, make a wighted graph.
-            Run a community detection over this truc.
-** Clemence: Nicolas + Louvain
-** Lionel:   Voyageur de commerce
+** Move sorting methods from  school.R  into  evolution.R
