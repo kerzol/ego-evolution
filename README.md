@@ -28,10 +28,7 @@ column at the timestamp _t_ is the ego-community structure around one
 school student _Υ_, selected in advance as a center of the community.
 Red means _in the community of Υ_, blue means _out the community of Υ_.
 
-<img src="figs/school005.png"  width="100%">
+<img src="figs/school-greedy-top-bottom-add.png"  width="100%">
 
 
-See also : [Slides (in french)!](http://kirgizov.link/talks/seminar-le2i-3mai-2016.pdf)
-
-
-
+See also : [Slides](http://kirgizov.link/talks/ccs-2016.pdf)
