@@ -98,7 +98,7 @@ vis.macro <- function() {
                )
 
     ## sort the metadata
-    school.meta[match (names(sresults[,i]), school.meta$node),] ->
+    school.meta[match (names(sresults[,1]), school.meta$node),] ->
         school.meta.ord
 
     ## first nodes are in top
