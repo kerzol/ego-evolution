@@ -1,1 +1,6 @@
 ** Move sorting methods from  school.R  into  evolution.R
+
+!! Calculate next pagerank vector by iterative algorithm starting from previous pagerank vector
+   Should be bloody fast (thanks to Eric Sanlaville for a good question that provoke the reflection and this algo)
+
+** Use nvgraph or gunrock for on-gpu calculation
